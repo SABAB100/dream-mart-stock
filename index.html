@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dream Mart Stock</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div id="login-screen" class="login-screen">
+  <h1>Dream Mart Stock</h1>
+  <p>Enter the shop password to open the stock.</p>
+  <input id="password-input" type="password" placeholder="Password" autocomplete="off" />
+  <button id="login-button">Open stock</button>
+  <p id="login-error" class="error hidden"></p>
+</div>
+
+<div id="app" class="hidden">
+  <header>
+    <h1>Dream Mart Stock</h1>
+    <p class="subtitle">Shoe stock — check, sell, update. Nothing is ever deleted on its own.</p>
+    <div class="header-actions">
+      <input id="search-input" type="text" placeholder="Search shoes by name or colour..." />
+      <button id="refresh-button">Refresh</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="summary">
+      <h2>How much is left</h2>
+      <div id="summary-list"></div>
+    </section>
+
+    <section class="add-form">
+      <h2 id="form-title">Add shoe</h2>
+      <label>
+        Shoe name
+        <input id="shoe-name" type="text" placeholder="e.g. Premium Leather Loafer" />
+      </label>
+      <label>
+        Price per pair (৳, optional)
+        <input id="shoe-price" type="number" min="0" step="1" placeholder="e.g. 1450" />
+      </label>
+      <label>
+        Colour (optional)
+        <input id="shoe-colour" type="text" placeholder="e.g. Black" />
+      </label>
+      <label>
+        Picture (optional)
+        <input id="shoe-picture" type="file" accept="image/*" />
+      </label>
+      <img id="picture-preview" class="picture-preview hidden" alt="Shoe picture preview" />
+      <div class="sizes-editor">
+        <span class="sizes-label">Sizes and stock (pairs)</span>
+        <div id="size-rows"></div>
+        <button id="add-size-button" type="button">+ Add size</button>
+      </div>
+      <p id="form-error" class="error hidden"></p>
+      <div class="form-actions">
+        <button id="save-shoe-button">Add shoe</button>
+        <button id="cancel-edit-button" class="secondary hidden">Cancel</button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Shoes</h2>
+      <div id="cards" class="cards"></div>
+      <p id="empty-message" class="hidden">No shoes yet. Add your first shoe above.</p>
+    </section>
+
+    <section class="history">
+      <h2>Sales history</h2>
+      <div id="sales-list"></div>
+      <p id="no-sales-message">No sales yet.</p>
+    </section>
+  </main>
+
+  <footer>Made by SADMAN SABAB</footer>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
