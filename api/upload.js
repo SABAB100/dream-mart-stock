@@ -1,6 +1,8 @@
 // POST /api/upload -> store a shoe picture in Vercel Blob and return its URL.
-//   Body: { dataUrl } — a base64 image data URL (the frontend compresses
-//   pictures to JPEG, max 1200px, before sending, so payloads stay small).
+// Uses the official @vercel/blob SDK (put), which talks to the correct Blob
+// API endpoint. (The previous version called blob.vercel.sh/<pathname>
+// directly, which is not the upload endpoint — that is why uploads failed
+// with 404.)
 // Requires the BLOB_READ_WRITE_TOKEN environment variable, which Vercel
 // adds automatically when a Blob store is connected to the project.
 const { requireAuth } = require('./_lib/auth');
@@ -33,20 +35,14 @@ module.exports = async (req, res) => {
     }
     const ext = mime === 'image/png' ? 'png' : 'jpg';
     const pathname = `shoes/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-    const blobRes = await fetch(`https://blob.vercel.sh/${pathname}`, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'x-api-version': '7',
-        'Content-Type': mime,
-      },
-      body: buffer,
+    const { put } = await import('@vercel/blob');
+    const blob = await put(pathname, buffer, {
+      access: 'public',
+      contentType: mime,
+      token,
     });
-    const blobData = await blobRes.json().catch(() => ({}));
-    if (!blobRes.ok || !blobData.url) {
-      throw new Error(blobData.error || `Image upload failed with status ${blobRes.status}`);
-    }
-    return send(res, 200, { url: blobData.url });
+    if (!blob || !blob.url) throw new Error('Image upload failed.');
+    return send(res, 200, { url: blob.url });
   } catch (err) {
     return sendError(res, err);
   }
